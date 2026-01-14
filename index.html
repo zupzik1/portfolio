@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio of a Creative Developer featuring projects, skills, and contact information.">
+    <title>Alex Dev | Creative Developer Portfolio</title>
+    <style>
+        /* --- CSS Variables & Theming --- */
+        :root {
+            --bg-color: #f9fafb;
+            --text-color: #1f2937;
+            --text-muted: #4b5563;
+            --card-bg: #ffffff;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --border: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --focus-ring: #60a5fa;
+            --nav-height: 70px;
+        }
+
+        /* Dark Mode Overrides */
+        body.dark-mode {
+            --bg-color: #111827;
+            --text-color: #f3f4f6;
+            --text-muted: #9ca3af;
+            --card-bg: #1f2937;
+            --primary: #60a5fa;
+            --primary-hover: #93c5fd;
+            --border: #374151;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- Reset & Base --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        a { text-decoration: none; color: inherit; transition: color 0.2s; }
+        ul { list-style: none; }
+        
+        /* Focus Management */
+        *:focus-visible {
+            outline: 3px solid var(--focus-ring);
+            outline-offset: 2px;
+        }
+
+        /* Skip Link for Accessibility */
+        .skip-link {
+            position: absolute; top: -40px; left: 0;
+            background: var(--primary); color: white;
+            padding: 8px; z-index: 100;
+            transition: top 0.2s;
+        }
+        .skip-link:focus { top: 0; }
+
+        /* --- Layout Containers --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section { padding: 80px 0; border-bottom: 1px solid var(--border); }
+        section:last-of-type { border-bottom: none; }
+
+        /* --- Navigation --- */
+        header {
+            position: sticky; top: 0;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            height: var(--nav-height);
+            z-index: 50;
+            display: flex; align-items: center;
+        }
+
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            width: 100%;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary); }
+
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a:hover { color: var(--primary); }
+
+        /* Dark Mode Toggle */
+        #theme-toggle {
+            background: none; border: 2px solid var(--border);
+            color: var(--text-color);
+            padding: 5px 10px; border-radius: 5px;
+            cursor: pointer; font-size: 0.9rem;
+        }
+        #theme-toggle:hover { border-color: var(--primary); }
+
+        /* --- Hero Section --- */
+        #hero {
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: flex-start;
+            min-height: calc(100vh - var(--nav-height));
+            padding-bottom: 0;
+        }
+
+        .hero-subtitle { color: var(--primary); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .hero-title { font-size: 3rem; margin: 10px 0; line-height: 1.2; }
+        .hero-desc { max-width: 600px; font-size: 1.2rem; color: var(--text-muted); margin-bottom: 30px; }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary); color: white;
+            padding: 12px 24px; border-radius: 6px;
+            font-weight: 600; border: none; cursor: pointer;
+        }
+        .btn:hover { background-color: var(--primary-hover); }
+
+        /* --- About Section --- */
+        .section-title { font-size: 2rem; margin-bottom: 40px; text-align: center; }
+        
+        .about-content {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+        }
+        
+        .skills-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+        .skill-tag {
+            background: var(--border); color: var(--text-color);
+            padding: 5px 12px; border-radius: 20px; font-size: 0.9rem;
+        }
+
+        /* --- Portfolio Grid --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .project-placeholder {
+            width: 100%; height: 180px;
+            background: linear-gradient(135deg, var(--border) 0%, var(--bg-color) 100%);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-muted); font-size: 2rem;
+        }
+
+        .project-info { padding: 20px; }
+        .project-title { font-size: 1.25rem; margin-bottom: 10px; }
+        .project-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 15px; }
+        
+        .project-links { display: flex; gap: 15px; }
+        .project-link { font-size: 0.9rem; font-weight: 600; color: var(--primary); }
+        .project-link:hover { text-decoration: underline; }
+
+        /* --- Contact Form --- */
+        .contact-wrapper { max-width: 600px; margin: 0 auto; }
+        
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; }
+        
+        input, textarea {
+            width: 100%; padding: 12px;
+            background: var(--bg-color); border: 1px solid var(--border);
+            color: var(--text-color); border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        input:focus, textarea:focus { border-color: var(--primary); outline: none; }
+        
+        .error-message {
+            color: #ef4444; font-size: 0.875rem; margin-top: 5px; display: none;
+        }
+        
+        input[aria-invalid="true"], textarea[aria-invalid="true"] { border-color: #ef4444; }
+
+        /* --- Footer --- */
+        footer {
+            padding: 40px 0; text-align: center;
+            background: var(--card-bg); border-top: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .nav-links { display: none; } /* Simplified for single file (would use burger menu ideally) */
+            .hero-title { font-size: 2.25rem; }
+            .about-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header role="banner">
+        <div class="container">
+            <nav role="navigation" aria-label="Main Navigation">
+                <a href="#" class="logo">AlexDev.</a>
+                <div class="nav-links">
+                    <a href="#about">About</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <button id="theme-toggle" aria-label="Toggle Dark Mode" aria-pressed="false">
+                    Dark Mode
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content" role="main">
+        
+        <section id="hero" aria-labelledby="hero-heading">
+            <div class="container">
+                <span class="hero-subtitle">Portfolio</span>
+                <h1 id="hero-heading" class="hero-title">Building accessible <br> web experiences.</h1>
+                <p class="hero-desc">I am a frontend developer passionate about minimalism, performance, and accessibility.</p>
+                <a href="#projects" class="btn">View My Work</a>
+            </div>
+        </section>
+
+        <section id="about" aria-labelledby="about-heading">
+            <div class="container">
+                <h2 id="about-heading" class="section-title">About Me</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Hello! I'm Alex, a developer based in Tech City. I enjoy turning complex problems into simple, beautiful, and intuitive interface designs. When I'm not coding, you'll find me reading about architecture or hiking.</p>
+                        <div class="skills-list" aria-label="List of skills">
+                            <span class="skill-tag">HTML5</span>
+                            <span class="skill-tag">CSS3</span>
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">React</span>
+                            <span class="skill-tag">A11y</span>
+                            <span class="skill-tag">Node.js</span>
+                        </div>
+                    </div>
+                    <div style="width: 100%; height: 300px; background: var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center;" role="img" aria-label="Abstract geometric shape representing the author">
+                        <span style="font-size: 4rem;">👋</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" aria-labelledby="projects-heading">
+            <div class="container">
+                <h2 id="projects-heading" class="section-title">Selected Projects</h2>
+                <div class="projects-grid">
+                    
+                    <article class="project-card">
+                        <div class="project-placeholder" role="img" aria-label="Project 1 Preview">💻</div>
+                        <div class="project-info">
+                            <h3 class="project-title"><a href="#" class="stretched-link">E-Commerce Dashboard</a></h3>
+                            <p class="project-desc">A responsive admin panel built with Grid and Flexbox with dark mode support.</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link" aria-label="View Live Demo of E-Commerce Dashboard">Live Demo</a>
+                                <a href="#" class="project-link" aria-label="View Source Code of E-Commerce Dashboard">Source Code</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-placeholder" role="img" aria-label="Project 2 Preview">🌤️</div>
+                        <div class="project-info">
+                            <h3 class="project-title">Weather App</h3>
+                            <p class="project-desc">Fetches real-time weather data using a public API. Includes geolocation.</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">Live Demo</a>
+                                <a href="#" class="project-link">Source Code</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-placeholder" role="img" aria-label="Project 3 Preview">📝</div>
+                        <div class="project-info">
+                            <h3 class="project-title">Task Manager</h3>
+                            <p class="project-desc">A LocalStorage based To-Do list with drag-and-drop functionality.</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">Live Demo</a>
+                                <a href="#" class="project-link">Source Code</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-placeholder" role="img" aria-label="Project 4 Preview">🎨</div>
+                        <div class="project-info">
+                            <h3 class="project-title">CSS Art Gallery</h3>
+                            <p class="project-desc">A collection of pure CSS illustrations and animations.</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">Live Demo</a>
+                                <a href="#" class="project-link">Source Code</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-placeholder" role="img" aria-label="Project 5 Preview">📱</div>
+                        <div class="project-info">
+                            <h3 class="project-title">Chat Application</h3>
+                            <p class="project-desc">Real-time chat app using WebSockets and a Node.js backend.</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">Live Demo</a>
+                                <a href="#" class="project-link">Source Code</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="project-card">
+                        <div class="project-placeholder" role="img" aria-label="Project 6 Preview">📊</div>
+                        <div class="project-info">
+                            <h3 class="project-title">Finance Tracker</h3>
+                            <p class="project-desc">Visualizes spending habits using D3.js charts and graphs.</p>
+                            <div class="project-links">
+                                <a href="#" class="project-link">Live Demo</a>
+                                <a href="#" class="project-link">Source Code</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" aria-labelledby="contact-heading">
+            <div class="container">
+                <h2 id="contact-heading" class="section-title">Get In Touch</h2>
+                <div class="contact-wrapper">
+                    <form id="contact-form" novalidate>
+                        
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" aria-required="true" autocomplete="name">
+                            <div class="error-message" id="name-error">Please enter your name.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" aria-required="true" autocomplete="email">
+                            <div class="error-message" id="email-error">Please enter a valid email address.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" aria-required="true"></textarea>
+                            <div class="error-message" id="message-error">Please enter a message.</div>
+                        </div>
+
+                        <button type="submit" class="btn" style="width: 100%;">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Alex Dev. All rights reserved.</p>
+            <p>
+                <a href="#" aria-label="GitHub Profile">GitHub</a> &bull; 
+                <a href="#" aria-label="LinkedIn Profile">LinkedIn</a> &bull; 
+                <a href="#" aria-label="Twitter Profile">Twitter</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Dark Mode Logic ---
+        const toggleBtn = document.getElementById('theme-toggle');
+        const body = document.body;
+        
+        // Check local storage for preference
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            body.classList.add('dark-mode');
+            toggleBtn.setAttribute('aria-pressed', 'true');
+            toggleBtn.textContent = 'Light Mode';
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            
+            // Update ARIA and Text
+            toggleBtn.setAttribute('aria-pressed', isDark);
+            toggleBtn.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+            
+            // Save preference
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        // --- Form Validation Logic ---
+        const form = document.getElementById('contact-form');
+        
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let isValid = true;
+            
+            // Helper to handle error display
+            const showError = (input, errorId, show) => {
+                const errorDiv = document.getElementById(errorId);
+                if (show) {
+                    errorDiv.style.display = 'block';
+                    input.setAttribute('aria-invalid', 'true');
+                    input.setAttribute('aria-describedby', errorId);
+                } else {
+                    errorDiv.style.display = 'none';
+                    input.setAttribute('aria-invalid', 'false');
+                    input.removeAttribute('aria-describedby');
+                }
+            };
+
+            // Validate Name
+            const nameInput = document.getElementById('name');
+            if (nameInput.value.trim() === '') {
+                showError(nameInput, 'name-error', true);
+                isValid = false;
+            } else {
+                showError(nameInput, 'name-error', false);
+            }
+
+            // Validate Email
+            const emailInput = document.getElementById('email');
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                showError(emailInput, 'email-error', true);
+                isValid = false;
+            } else {
+                showError(emailInput, 'email-error', false);
+            }
+
+            // Validate Message
+            const msgInput = document.getElementById('message');
+            if (msgInput.value.trim() === '') {
+                showError(msgInput, 'message-error', true);
+                isValid = false;
+            } else {
+                showError(msgInput, 'message-error', false);
+            }
+
+            if (isValid) {
+                alert('Thanks! Your message has been "sent" (this is a demo).');
+                form.reset();
+            } else {
+                // Focus the first invalid input
+                const firstInvalid = form.querySelector('[aria-invalid="true"]');
+                if (firstInvalid) firstInvalid.focus();
+            }
+        });
+    </script>
+</body>
+</html>
